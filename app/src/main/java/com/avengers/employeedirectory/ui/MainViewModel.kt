@@ -38,30 +38,42 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
             when (stateEvent) {
                 is GetEmployeesEvent -> {
                     repository.getEmployees(stateEvent.forced)
-                        .onEach { newDataState ->
-                            _dataState.value = newDataState
+                            .debounce(500)
+                            .onEach { newDataState ->
+                                if (_dataState.value != newDataState) {
+                                    _dataState.value = newDataState
+                                }
                         }
                         .launchIn(viewModelScope)
                 }
 
                 is GetEmployeesSortedByTeamEvent -> {
                     repository.getEmployeesSortedByTeam()
-                        .onEach { newDataState ->
-                            _dataState.value = newDataState
-                        }
+                            .debounce(500)
+                            .onEach { newDataState ->
+                                if (_dataState.value != newDataState) {
+                                    _dataState.value = newDataState
+                                }
+                            }
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeesSortedByLastNameEvent -> {
                     repository.getEmployeesSortedByLastName()
-                        .onEach { newDataState ->
-                            _dataState.value = newDataState
+                            .debounce(500)
+                            .onEach { newDataState ->
+                                if (_dataState.value != newDataState) {
+                                    _dataState.value = newDataState
+                                }
                         }
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeesSortedByFirstNameEvent -> {
                     repository.getEmployeesSortedByFirstName()
-                        .onEach { newDataState ->
-                            _dataState.value = newDataState
+                            .debounce(500)
+                            .onEach { newDataState ->
+                                if (_dataState.value != newDataState) {
+                                    _dataState.value = newDataState
+                                }
                         }
                         .launchIn(viewModelScope)
                 }
@@ -76,8 +88,8 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeeDetailEvent -> {
-                    _oneTimeNavigateEvent.postValue(Event(GetEmployeeDetailEvent(stateEvent.employee)))
                     _currentEmployee.postValue(stateEvent.employee)
+                    _oneTimeNavigateEvent.postValue(Event(GetEmployeeDetailEvent(stateEvent.employee)))
                 }
             }
         }

@@ -31,21 +31,21 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_employee_detail, container, false)
+        return inflater.inflate(R.layout.fragment_employee_detail, container, false)
+    }
 
-        if (viewModel.currentEmployee.value == null) {
-            changeViewsVisibility(view, false)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.currentEmployee.observe(viewLifecycleOwner, Observer { employee ->
             if (employee != null) {
                 changeViewsVisibility(view, true)
                 view.findViewById<AppCompatImageView>(R.id.profile_pic_large)
-                    .load(employee.photoUrlLarge, imageLoader) {
-                        crossfade(200)
-                        placeholder(R.drawable.ic_launcher_foreground)
-                    }
+                        .load(employee.photoUrlLarge, imageLoader) {
+                            crossfade(200)
+                            placeholder(R.drawable.ic_launcher_foreground)
+                        }
                 view.findViewById<AppCompatTextView>(R.id.employee_full_name).text =
-                    "${employee.firstName} ${employee.lastName}"
+                        "${employee.firstName} ${employee.lastName}"
                 view.findViewById<AppCompatTextView>(R.id.team).text = employee.team
                 view.findViewById<AppCompatTextView>(R.id.employee_type).text =
                         transformEmployeeType(employee.employeeType)
@@ -84,7 +84,6 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
                 changeViewsVisibility(view, false)
             }
         })
-        return view
     }
 
     private fun changeViewsVisibility(view: View, visible: Boolean) {

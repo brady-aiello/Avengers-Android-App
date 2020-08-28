@@ -8,7 +8,6 @@ import android.widget.SearchView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
@@ -49,6 +48,7 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
         setHasOptionsMenu(true)
     }
 
+    @FlowPreview
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,12 +56,14 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
         swipe_refresh.setOnRefreshListener {
             viewModel.setStateEvent(GetEmployeesEvent(forced = true))
         }
-        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
+        viewModel.dataState.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 is DataState.Success -> {
                     swipe_refresh.isRefreshing = false
-                    recyclerViewAdapter.employees = dataState.data
-                    recyclerViewAdapter.notifyDataSetChanged()
+                    if (recyclerViewAdapter.employees != dataState.data) {
+                        recyclerViewAdapter.employees = dataState.data
+                        recyclerViewAdapter.notifyDataSetChanged()
+                    }
                     item_list.visibility = RecyclerView.VISIBLE
                     empty_employees_response_text_view.visibility = AppCompatTextView.GONE
                     shrug_text_view.visibility = AppCompatTextView.GONE
@@ -100,7 +102,8 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
                 Log.d(TAG, "onViewCreated: $employee")
             }
 
-        })
+        }
+
         viewModel.oneTimeNavigateEvent.observe(viewLifecycleOwner) { event ->
 
             val getEmployeeEvent = event.getContentIfNotHandled()
@@ -126,6 +129,7 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
         recyclerView.adapter = recyclerViewAdapter
     }
 
+    @FlowPreview
     private fun createAlertDialog(errorTitle: String) {
         val alertDialog: AlertDialog? = activity?.let {
             val builder = AlertDialog.Builder(it)

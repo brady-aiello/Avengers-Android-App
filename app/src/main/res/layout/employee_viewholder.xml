@@ -8,15 +8,15 @@
     app:cardElevation="10dp"
     android:padding="8dp"
     android:layout_margin="8dp"
-    app:cardCornerRadius="2dp">
+    app:cardCornerRadius="4dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.appcompat.widget.AppCompatImageView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="200dp"
+            android:layout_height="120dp"
             android:id="@+id/profile_pic_small"
             tools:src="@mipmap/smart_hulk"
             android:scaleType="fitStart"
