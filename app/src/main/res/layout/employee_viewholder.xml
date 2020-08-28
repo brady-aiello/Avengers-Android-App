@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.MainActivity"
+    app:cardElevation="10dp"
+    android:padding="8dp"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="2dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:id="@+id/profile_pic_small"
+            tools:src="@mipmap/smart_hulk"
+            android:scaleType="fitStart"
+            android:padding="8dp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/employee_full_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/profile_pic_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            tools:text="Bruce Banner"
+            android:layout_marginEnd="8dp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/team"
+            app:layout_constraintTop_toBottomOf="@id/employee_full_name"
+            app:layout_constraintStart_toEndOf="@id/profile_pic_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="Demolition"
+            android:layout_marginEnd="8dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
