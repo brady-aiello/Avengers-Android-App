@@ -31,7 +31,9 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_employee_detail, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_employee_detail, container, false)
+        changeViewsVisibility(view, false)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +43,7 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
                 changeViewsVisibility(view, true)
                 view.findViewById<AppCompatImageView>(R.id.profile_pic_large)
                         .load(employee.photoUrlLarge, imageLoader) {
-                            crossfade(200)
+                            crossfade(300)
                             placeholder(R.drawable.ic_launcher_foreground)
                         }
                 view.findViewById<AppCompatTextView>(R.id.employee_full_name).text =
