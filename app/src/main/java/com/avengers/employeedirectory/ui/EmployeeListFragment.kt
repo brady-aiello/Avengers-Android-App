@@ -113,9 +113,12 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
                         actionItemListFragmentToEmployeeDetailFragment()
                     view.findNavController().navigate(action)
                 } else {
-                    val navHostFragment = childFragmentManager.findFragmentById(R.id.detail_fragment_container)
-                            as MasterDetailNavHostFragment
-                    navHostFragment.navController.navigate(R.id.employeeDetailFragment)
+                    if (viewModel.currentEmployee.value == null) {
+                        val navHostFragment = childFragmentManager.findFragmentById(R.id.detail_fragment_container)
+                                as MasterDetailNavHostFragment
+
+                        navHostFragment.navController.navigate(R.id.employeeDetailFragment)
+                    }
                 }
             }
         }

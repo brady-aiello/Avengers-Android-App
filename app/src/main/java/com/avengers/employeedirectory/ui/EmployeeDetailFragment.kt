@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import coil.ImageLoader
 import coil.load
+import coil.memory.MemoryCache
 import com.google.android.material.button.MaterialButton
 import com.avengers.employeedirectory.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +45,15 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
                 changeViewsVisibility(view, true)
                 view.findViewById<AppCompatImageView>(R.id.profile_pic_large)
                         .load(employee.photoUrlLarge, imageLoader) {
-                            crossfade(300)
-                            placeholder(R.drawable.ic_launcher_foreground)
+                            if (imageLoader.memoryCache[MemoryCache.Key(employee.photoUrlLarge)] == null) {
+                                crossfade(1000)
+                                placeholder(R.drawable.ic_launcher_foreground)
+                                memoryCacheKey(employee.photoUrlLarge)
+                            }
+                            else {
+                                crossfade(1000)
+                                placeholder(R.drawable.ic_launcher_foreground)
+                            }
                         }
                 view.findViewById<AppCompatTextView>(R.id.employee_full_name).text =
                         "${employee.firstName} ${employee.lastName}"

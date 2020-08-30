@@ -20,7 +20,8 @@ android {
         versionCode(1)
         versionName("1.0")
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.avengers.employeedirectory.CustomHiltTestRunner"
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments(mutableMapOf(
@@ -29,6 +30,27 @@ android {
                 )
             }
         }
+    }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+        exclude("META-INF/*.kotlin_module")
+    }
+
+    sourceSets["androidTest"].java {
+        srcDir("src/shared/java")
+    }
+
+    sourceSets["test"].java {
+        srcDir("src/shared/java")
     }
 
     buildTypes {
@@ -47,79 +69,75 @@ android {
     }
 }
 dependencies {
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    //val kotlinVersion = rootProject.extra.get("kotlinVersion")
-    //implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC") // JVM dependency
-    implementation(AndroidX.core.ktx)
-    //implementation("androidx.core:core-ktx:1.3.1")
+    // Source compatibility
     implementation(Kotlin.stdlib.jdk8)
+
+    // Core Jetpack dependencies
+    implementation(AndroidX.legacy.supportV4)
+    implementation(AndroidX.core.ktx)
+
+    // UI
     implementation(AndroidX.appCompat)
+    implementation(AndroidX.constraintLayout)
     implementation(Google.android.material)
 
-    implementation(AndroidX.constraintLayout)
+    // Serialization
+    implementation(KotlinX.serialization.core)
+
+    // Coroutines
     implementation(KotlinX.coroutines.core)
+    implementation(KotlinX.coroutines.android)
 
     // OkHttp Logging Interceptor
     implementation(Square.okHttp3.loggingInterceptor)
 
+    // Image loading
     implementation(COIL)
 
     // Hilt
-    val hiltVersion = "2.28-alpha"
-    println("HILT VERSION: ${Google.dagger.hilt.android}")
-
-    //implementation(Google.dagger.hilt.android)
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    //kapt(Google.dagger.hilt.android.compiler)
-    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
-
-    val hiltViewModelsVersion = "1.0.0-alpha01"
-    //println("HILT VIEWMODEL: ${AndroidX.hilt.lifecycleViewModel}")
+    implementation(Google.dagger.hilt.android)
+    kapt(Google.dagger.hilt.android.compiler)
     implementation(AndroidX.hilt.lifecycleViewModel)
-    //implementation("androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelsVersion")
     kapt(AndroidX.hilt.compiler)
-    //kapt("androidx.hilt:hilt-compiler:$hiltViewModelsVersion")
 
     // Retrofit
     implementation(Square.retrofit2.retrofit)
     implementation(JakeWharton.retrofit2.converter.kotlinxSerialization)
 
-    val roomVersion = "2.2.5"
+    // Room
     implementation(AndroidX.room.runtime)
     kapt(AndroidX.room.compiler)
     implementation(AndroidX.room.ktx)
 
-    val fragmentVersion = "1.3.0-alpha07"
+    // Lifecycle
     implementation(AndroidX.fragmentKtx)
-
     implementation(AndroidX.activityKtx)
-
     kapt(AndroidX.lifecycle.compiler)
     implementation(AndroidX.lifecycle.liveDataKtx)
     implementation(AndroidX.lifecycle.viewModelKtx)
 
-    val navigationVersion = "2.3.0"
+    // Navigation
     implementation(AndroidX.navigation.fragmentKtx)
     implementation(AndroidX.navigation.uiKtx)
 
+    // Unit Test
+    testImplementation(Testing.junit4)
+    androidTestImplementation(AndroidX.test.ext.junit)
 
-    // Test
+    // Coroutines Test
+    androidTestImplementation(KotlinX.coroutines.test)
+    testImplementation(KotlinX.coroutines.test)
 
-    //testImplementation(Junit)
-    testImplementation("junit:junit:4.13")
-    //androidTestImplementation(AndroidX.test.ext)
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    // UI Test
+    androidTestImplementation(AndroidX.test.espresso.core)
     debugImplementation(AndroidX.fragmentTesting)
-    //debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
+    androidTestImplementation(AndroidX.test.coreKtx)
 
-    val testVersion = "1.3.0-rc01"
-    //androidTestImplementation(AndroidX.test.coreKtx)
-    androidTestImplementation("androidx.test:core-ktx:$testVersion")
+    // Hilt / Dagger Test
+    testImplementation(Google.dagger.hilt.android.testing)
+    androidTestImplementation(Google.dagger.hilt.android.testing)
+    kaptTest(Google.dagger.hilt.android.compiler)
+    kaptAndroidTest(Google.dagger.hilt.android.compiler)
 }
 
 kapt {

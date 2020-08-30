@@ -8,8 +8,10 @@ import coil.load
 import com.avengers.employeedirectory.R
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.util.EmployeesStateEvent
+import kotlinx.coroutines.FlowPreview
 
-class EmployeeRecyclerViewAdapter (val imageLoader: ImageLoader, var employees: List<Employee> = listOf(),
+class EmployeeRecyclerViewAdapter (
+    private val imageLoader: ImageLoader, var employees: List<Employee> = listOf(),
     val viewModel: MainViewModel):
     RecyclerView.Adapter<EmployeeViewHolder>() {
 
@@ -21,9 +23,11 @@ class EmployeeRecyclerViewAdapter (val imageLoader: ImageLoader, var employees: 
 
     override fun getItemCount(): Int = employees.size
 
+    @FlowPreview
     override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
         val employee = employees[position]
         holder.employeePhoto.load(employee.photoUrlSmall, imageLoader) {
+            memoryCacheKey(employee.photoUrlSmall)
             crossfade(true)
             placeholder(R.drawable.ic_launcher_foreground)
         }

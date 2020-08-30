@@ -11,10 +11,7 @@ interface EmployeesDao {
     suspend fun insert(employeeCacheEntity: EmployeeCacheEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(employeeCacheEntities: List<EmployeeCacheEntity>): Unit
-
-    @Query("SELECT * FROM employees")
-    suspend fun getEmployees(): List<EmployeeCacheEntity>
+    suspend fun insertAll(employeeCacheEntities: List<EmployeeCacheEntity>)
 
     @Query("SELECT * FROM employees ORDER BY team")
     suspend fun getEmployeesSortedByTeam(): List<EmployeeCacheEntity>

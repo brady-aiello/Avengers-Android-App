@@ -1,10 +1,12 @@
 package com.avengers.employeedirectory.ui
 
+import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.avengers.employeedirectory.async.DispatcherProvider
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.repository.EmployeeRepository
 import com.avengers.employeedirectory.util.DataState
@@ -19,7 +21,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
-class MainViewModel @ViewModelInject constructor(private val repository: EmployeeRepository):
+class MainViewModel @ViewModelInject constructor(private val repository: EmployeeRepository,
+                                                 private val dispatcherProvider: DispatcherProvider):
     ViewModel() {
 
     private val _dataState: MutableLiveData<DataState<List<Employee>>> = MutableLiveData()
@@ -34,62 +37,64 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
 
     @FlowPreview
     fun setStateEvent(stateEvent: EmployeesStateEvent) {
-        viewModelScope.launch(IO) {
+        viewModelScope.launch(dispatcherProvider.io()) {
             when (stateEvent) {
                 is GetEmployeesEvent -> {
                     repository.getEmployees(stateEvent.forced)
-                            .debounce(500)
-                            .onEach { newDataState ->
-                                if (_dataState.value != newDataState) {
-                                    _dataState.value = newDataState
-                                }
+                        .debounce(500)
+                        .onEach { newDataState ->
+                            if (_dataState.value != newDataState) {
+                                _dataState.value = newDataState
+                            }
                         }
                         .launchIn(viewModelScope)
                 }
 
                 is GetEmployeesSortedByTeamEvent -> {
                     repository.getEmployeesSortedByTeam()
-                            .debounce(500)
-                            .onEach { newDataState ->
-                                if (_dataState.value != newDataState) {
-                                    _dataState.value = newDataState
-                                }
+                        .debounce(500)
+                        .onEach { newDataState ->
+                            if (_dataState.value != newDataState) {
+                                _dataState.value = newDataState
                             }
+                        }
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeesSortedByLastNameEvent -> {
                     repository.getEmployeesSortedByLastName()
-                            .debounce(500)
-                            .onEach { newDataState ->
-                                if (_dataState.value != newDataState) {
-                                    _dataState.value = newDataState
-                                }
+                        .debounce(500)
+                        .onEach { newDataState ->
+                            if (_dataState.value != newDataState) {
+                                _dataState.value = newDataState
+                            }
                         }
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeesSortedByFirstNameEvent -> {
                     repository.getEmployeesSortedByFirstName()
-                            .debounce(500)
-                            .onEach { newDataState ->
-                                if (_dataState.value != newDataState) {
-                                    _dataState.value = newDataState
-                                }
+                        .debounce(500)
+                        .onEach { newDataState ->
+                            if (_dataState.value != newDataState) {
+                                _dataState.value = newDataState
+                            }
                         }
                         .launchIn(viewModelScope)
                 }
                 is FilterEmployeesByAnyEvent -> {
                     repository.filterByAny(stateEvent.searchTerm)
-                            .debounce(500)
-                            .onEach { newDataState ->
-                                if (_dataState.value != newDataState) {
+                        .debounce(500)
+                        .onEach { newDataState ->
+                            if (_dataState.value != newDataState) {
                                 _dataState.value = newDataState
                             }
                         }
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeeDetailEvent -> {
-                    _currentEmployee.postValue(stateEvent.employee)
-                    _oneTimeNavigateEvent.postValue(Event(GetEmployeeDetailEvent(stateEvent.employee)))
+                    if (_currentEmployee.value != stateEvent.employee) {
+                        _currentEmployee.postValue(stateEvent.employee)
+                        _oneTimeNavigateEvent.postValue(Event(GetEmployeeDetailEvent(stateEvent.employee)))
+                    }
                 }
             }
         }
