@@ -56,6 +56,7 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
         swipe_refresh.setOnRefreshListener {
             viewModel.setStateEvent(GetEmployeesEvent(forced = true))
         }
+
         viewModel.dataState.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 is DataState.Success -> {
@@ -101,7 +102,6 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
             viewModel.currentEmployee.observe(viewLifecycleOwner) { employee ->
                 Log.d(TAG, "onViewCreated: $employee")
             }
-
         }
 
         viewModel.oneTimeNavigateEvent.observe(viewLifecycleOwner) { event ->
