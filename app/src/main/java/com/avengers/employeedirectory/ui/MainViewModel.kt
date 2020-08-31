@@ -1,6 +1,5 @@
 package com.avengers.employeedirectory.ui
 
-import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avengers.employeedirectory.async.DispatcherProvider
 import com.avengers.employeedirectory.models.Employee
+import com.avengers.employeedirectory.repository.DefaultEmployeeRepository
 import com.avengers.employeedirectory.repository.EmployeeRepository
 import com.avengers.employeedirectory.util.DataState
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.*
 import com.avengers.employeedirectory.util.Event
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn

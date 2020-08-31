@@ -13,18 +13,27 @@ import kotlinx.coroutines.flow.flow
 import java.lang.Exception
 import java.util.*
 
-class EmployeeRepository constructor(@ApplicationContext private val appContext: Context,
-                                     private val employeesDao: EmployeesDao,
-                                     private val employeeService: EmployeeService,
-                                     private val cacheMapper: CacheMapper,
-                                     private val networkMapper: NetworkMapper) {
+interface EmployeeRepository {
+    fun getEmployees(forced: Boolean = false): Flow<DataState<List<Employee>>>
+    fun getEmployeesSortedByLastName(): Flow<DataState<List<Employee>>>
+    fun getEmployeesSortedByFirstName(): Flow<DataState<List<Employee>>>
+    fun getEmployeesSortedByTeam(): Flow<DataState<List<Employee>>>
+    fun filterByAny(searchTerm: String): Flow<DataState<List<Employee>>>
+    fun getEmployee(id: String): Flow<DataState<Employee>>
+}
+
+class DefaultEmployeeRepository constructor(@ApplicationContext private val appContext: Context,
+                                            private val employeesDao: EmployeesDao,
+                                            private val employeeService: EmployeeService,
+                                            private val cacheMapper: CacheMapper,
+                                            private val networkMapper: NetworkMapper): EmployeeRepository {
     companion object {
         private const val LAST_NETWORK_LOOKUP_EMPLOYEES = "LAST_NETWORK_LOOKUP_EMPLOYEES"
         private const val EMPLOYEES_SHARED_PREFS = "EMPLOYEES_SHARED_PREFS"
         // After you get employee data, don't look again for
         private const val EMPLOYEES_CACHE_LIFESPAN = 1000 * 60 * 60 * 12
     }
-    fun getEmployees(forced: Boolean = false): Flow<DataState<List<Employee>>> =
+    override fun getEmployees(forced: Boolean): Flow<DataState<List<Employee>>> =
         flow {
             emit(DataState.Loading)
             try {
@@ -49,7 +58,7 @@ class EmployeeRepository constructor(@ApplicationContext private val appContext:
             }
         }
 
-    fun getEmployeesSortedByLastName(): Flow<DataState<List<Employee>>> =
+    override fun getEmployeesSortedByLastName(): Flow<DataState<List<Employee>>> =
         flow {
             emit(DataState.Loading)
             try {
@@ -64,7 +73,7 @@ class EmployeeRepository constructor(@ApplicationContext private val appContext:
             }
         }
 
-    fun getEmployeesSortedByFirstName(): Flow<DataState<List<Employee>>> =
+    override fun getEmployeesSortedByFirstName(): Flow<DataState<List<Employee>>> =
         flow {
             emit(DataState.Loading)
             try {
@@ -79,7 +88,7 @@ class EmployeeRepository constructor(@ApplicationContext private val appContext:
             }
         }
 
-    fun getEmployeesSortedByTeam(): Flow<DataState<List<Employee>>> =
+    override fun getEmployeesSortedByTeam(): Flow<DataState<List<Employee>>> =
         flow {
             emit(DataState.Loading)
             try {
@@ -94,7 +103,7 @@ class EmployeeRepository constructor(@ApplicationContext private val appContext:
             }
         }
 
-    fun filterByAny(searchTerm: String): Flow<DataState<List<Employee>>> =
+    override fun filterByAny(searchTerm: String): Flow<DataState<List<Employee>>> =
         flow {
             emit(DataState.Searching)
             try {
@@ -108,7 +117,8 @@ class EmployeeRepository constructor(@ApplicationContext private val appContext:
                 emit(DataState.Error(e))
             }
         }
-    fun getEmployee(id: String): Flow<DataState<Employee>> =
+
+    override fun getEmployee(id: String): Flow<DataState<Employee>> =
         flow {
             emit(DataState.Loading)
             try {

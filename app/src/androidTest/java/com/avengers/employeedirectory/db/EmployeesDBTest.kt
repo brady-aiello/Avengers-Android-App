@@ -31,7 +31,7 @@ class EmployeesDBTest {
     lateinit var employeeDataBase: EmployeeDatabase
     lateinit var employeesDao: EmployeesDao
     @Inject
-    lateinit var cachemapper: CacheMapper
+    lateinit var cacheMapper: CacheMapper
     @ExperimentalCoroutinesApi
     private val testDispatcher = TestCoroutineDispatcher()
     @ExperimentalCoroutinesApi
@@ -54,7 +54,7 @@ class EmployeesDBTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testGetAllSortedByLastName() = testScope.runBlockingTest  {
-        val cacheEmployeesEntity = cachemapper.mapToEntities(testEmployees).sortedBy {
+        val cacheEmployeesEntity = cacheMapper.mapToEntities(testEmployees).sortedBy {
             item -> item.lastName
         }
         employeesDao.insertAll(cacheEmployeesEntity)
@@ -65,9 +65,9 @@ class EmployeesDBTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testGetAllSortedByTeam() = testScope.runBlockingTest  {
-        employeesDao.insertAll(cachemapper.mapToEntities(testEmployees))
+        employeesDao.insertAll(cacheMapper.mapToEntities(testEmployees))
 
-        val cacheEmployeesEntity = cachemapper.mapToEntities(testEmployees).sortedBy {
+        val cacheEmployeesEntity = cacheMapper.mapToEntities(testEmployees).sortedBy {
                 item -> item.team
         }
         val gotEmployees = employeesDao.getEmployeesSortedByTeam()
@@ -77,8 +77,8 @@ class EmployeesDBTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testGetAllSortedByFirstName() = testScope.runBlockingTest  {
-        employeesDao.insertAll(cachemapper.mapToEntities(testEmployees))
-        val cacheEmployeesEntity = cachemapper.mapToEntities(testEmployees).sortedBy {
+        employeesDao.insertAll(cacheMapper.mapToEntities(testEmployees))
+        val cacheEmployeesEntity = cacheMapper.mapToEntities(testEmployees).sortedBy {
                 item -> item.firstName
         }
         val gotEmployees = employeesDao.getEmployeesSortedByFirstName()
@@ -88,9 +88,9 @@ class EmployeesDBTest {
     @ExperimentalCoroutinesApi
     @Test
     fun testGetAllBySearchTerm() = testScope.runBlockingTest  {
-        employeesDao.insertAll(cachemapper.mapToEntities(testEmployees))
+        employeesDao.insertAll(cacheMapper.mapToEntities(testEmployees))
         val searchTerm = "iron"
-        val cacheEmployeesEntity = cachemapper.mapToEntities(testEmployees)
+        val cacheEmployeesEntity = cacheMapper.mapToEntities(testEmployees)
             .filterByAny(searchTerm)
         val gotEmployees = employeesDao.filterEmployeesByAny(searchTerm)
         assertEquals(cacheEmployeesEntity, gotEmployees)

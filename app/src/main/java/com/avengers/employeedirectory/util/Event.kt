@@ -1,6 +1,6 @@
 package com.avengers.employeedirectory.util
 
-class Event<T>(private val content: T) {
+data class Event<T>(private val content: T) {
 
     var hasBeenHandled = false
         private set // Allow external read but not write

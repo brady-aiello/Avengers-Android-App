@@ -132,6 +132,7 @@ dependencies {
     androidTestImplementation(AndroidX.test.espresso.core)
     debugImplementation(AndroidX.fragmentTesting)
     androidTestImplementation(AndroidX.test.coreKtx)
+    androidTestImplementation(AndroidX.archCore.testing)
 
     // Hilt / Dagger Test
     testImplementation(Google.dagger.hilt.android.testing)

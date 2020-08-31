@@ -5,6 +5,7 @@ import com.avengers.employeedirectory.db.CacheMapper
 import com.avengers.employeedirectory.db.EmployeesDao
 import com.avengers.employeedirectory.network.EmployeeService
 import com.avengers.employeedirectory.network.NetworkMapper
+import com.avengers.employeedirectory.repository.DefaultEmployeeRepository
 import com.avengers.employeedirectory.repository.EmployeeRepository
 import dagger.Module
 import dagger.Provides
@@ -26,5 +27,5 @@ object EmployeeRepositoryModule {
         cacheMapper: CacheMapper,
         networkMapper: NetworkMapper
     ): EmployeeRepository =
-        EmployeeRepository(context, employeesDao, employeeService, cacheMapper, networkMapper)
+        DefaultEmployeeRepository(context, employeesDao, employeeService, cacheMapper, networkMapper)
 }
