@@ -30,8 +30,10 @@ class EmployeesDBTest {
 
     lateinit var employeeDataBase: EmployeeDatabase
     lateinit var employeesDao: EmployeesDao
+
     @Inject
     lateinit var cacheMapper: CacheMapper
+
     @ExperimentalCoroutinesApi
     private val testDispatcher = TestCoroutineDispatcher()
     @ExperimentalCoroutinesApi
@@ -48,7 +50,6 @@ class EmployeesDBTest {
             .setQueryExecutor(testDispatcher.asExecutor())
             .build()
         employeesDao = employeeDataBase.employeesDao()
-
     }
 
     @ExperimentalCoroutinesApi

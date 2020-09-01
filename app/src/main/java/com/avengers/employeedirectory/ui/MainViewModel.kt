@@ -90,9 +90,11 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                         .launchIn(viewModelScope)
                 }
                 is GetEmployeeDetailEvent -> {
-                    if (_currentEmployee.value != stateEvent.employee) {
+                    // Don't navigate if we're in landscape mode and the selected employee
+                    // hasn't changed.
+                    if (!stateEvent.isTablet || _currentEmployee.value != stateEvent.employee) {
                         _currentEmployee.postValue(stateEvent.employee)
-                        _oneTimeNavigateEvent.postValue(Event(GetEmployeeDetailEvent(stateEvent.employee)))
+                        _oneTimeNavigateEvent.postValue(Event(stateEvent))
                     }
                 }
             }

@@ -105,7 +105,6 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
         }
 
         viewModel.oneTimeNavigateEvent.observe(viewLifecycleOwner) { event ->
-
             val getEmployeeEvent = event.getContentIfNotHandled()
             if (getEmployeeEvent != null) {
                 if (!isTablet) {
