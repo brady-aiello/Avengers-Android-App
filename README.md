@@ -2,6 +2,8 @@
 ## Project Overview
 This is an MVI sample app I like to keep around for trying out different approaches to databases, architecture components, asynchronous programming, etc.
 
+<img src="media/avengers-demo.gif" alt="drawing" width="300"/>
+
 ## All app features:
 - Single Activity App
 - Beautiful UI with Material Design
