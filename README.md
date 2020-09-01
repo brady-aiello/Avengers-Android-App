@@ -141,7 +141,7 @@ unit, integration, and ui testing, and there will be plenty in subsequent versio
 Another piece of low-hanging fruit is better caching using pre-fetching. Right now, both low and high quality images are
 cached when requested, which is great. But, we can also cache them before they're needed. When we request a small image 
 within the ```EmployeeViewHolder```, we can fire a job for ```WorkManager``` to handle robustly. Our custom 
-Coroutine worker will could call Coil's preload method: https://coil-kt.github.io/coil/getting_started/#preloading
+Coroutine worker could call Coil's preload method: https://coil-kt.github.io/coil/getting_started/#preloading
 
 Adding a search cache shouldn't be hard either, and would be a valuable add-on.
 
