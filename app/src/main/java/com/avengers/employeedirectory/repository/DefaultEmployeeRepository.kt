@@ -30,7 +30,7 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
     companion object {
         private const val LAST_NETWORK_LOOKUP_EMPLOYEES = "LAST_NETWORK_LOOKUP_EMPLOYEES"
         private const val EMPLOYEES_SHARED_PREFS = "EMPLOYEES_SHARED_PREFS"
-        // After you get employee data, don't look again for
+        // After you get employee data, don't look again for 6 hours
         private const val EMPLOYEES_CACHE_LIFESPAN = 1000 * 60 * 60 * 12
     }
     override fun getEmployees(forced: Boolean): Flow<DataState<List<Employee>>> =

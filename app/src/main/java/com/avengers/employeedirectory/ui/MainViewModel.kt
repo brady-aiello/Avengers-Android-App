@@ -7,17 +7,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avengers.employeedirectory.async.DispatcherProvider
 import com.avengers.employeedirectory.models.Employee
-import com.avengers.employeedirectory.repository.DefaultEmployeeRepository
 import com.avengers.employeedirectory.repository.EmployeeRepository
 import com.avengers.employeedirectory.util.DataState
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.*
 import com.avengers.employeedirectory.util.Event
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainViewModel @ViewModelInject constructor(private val repository: EmployeeRepository,
@@ -43,10 +43,11 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                         .debounce(500)
                         .onEach { newDataState ->
                             if (_dataState.value != newDataState) {
-                                _dataState.value = newDataState
+                                withContext(dispatcherProvider.main()) {
+                                    _dataState.value = newDataState
+                                }
                             }
-                        }
-                        .launchIn(viewModelScope)
+                        }.collect()
                 }
 
                 is GetEmployeesSortedByTeamEvent -> {
@@ -54,40 +55,44 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                         .debounce(500)
                         .onEach { newDataState ->
                             if (_dataState.value != newDataState) {
-                                _dataState.value = newDataState
+                                withContext(dispatcherProvider.main()) {
+                                    _dataState.value = newDataState
+                                }
                             }
-                        }
-                        .launchIn(viewModelScope)
+                        }.collect()
                 }
                 is GetEmployeesSortedByLastNameEvent -> {
                     repository.getEmployeesSortedByLastName()
                         .debounce(500)
                         .onEach { newDataState ->
                             if (_dataState.value != newDataState) {
-                                _dataState.value = newDataState
+                                withContext(dispatcherProvider.main()) {
+                                    _dataState.value = newDataState
+                                }
                             }
-                        }
-                        .launchIn(viewModelScope)
+                        }.collect()
                 }
                 is GetEmployeesSortedByFirstNameEvent -> {
                     repository.getEmployeesSortedByFirstName()
                         .debounce(500)
                         .onEach { newDataState ->
                             if (_dataState.value != newDataState) {
-                                _dataState.value = newDataState
+                                withContext(dispatcherProvider.main()) {
+                                    _dataState.value = newDataState
+                                }
                             }
-                        }
-                        .launchIn(viewModelScope)
+                        }.collect()
                 }
                 is FilterEmployeesByAnyEvent -> {
                     repository.filterByAny(stateEvent.searchTerm)
                         .debounce(500)
                         .onEach { newDataState ->
                             if (_dataState.value != newDataState) {
-                                _dataState.value = newDataState
+                                withContext(dispatcherProvider.main()) {
+                                    _dataState.value = newDataState
+                                }
                             }
-                        }
-                        .launchIn(viewModelScope)
+                        }.collect()
                 }
                 is GetEmployeeDetailEvent -> {
                     // Don't navigate if we're in landscape mode and the selected employee
