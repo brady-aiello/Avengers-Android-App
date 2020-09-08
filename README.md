@@ -4,6 +4,10 @@ This is an MVI sample app I like to keep around for trying out different approac
 
 <img src="media/avengers-demo.gif" alt="drawing" width="300"/>
 
+Recently I also started cropping images using facial recognition. Google's ML-Kit made this fairly simple.
+
+<img src="media/ML-square-image.png" alt="drawing" width="300"/>
+
 ## All app features:
 - Single Activity App
 - Beautiful UI with Material Design
