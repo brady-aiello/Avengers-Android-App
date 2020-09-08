@@ -33,6 +33,7 @@ class EmployeeRecyclerViewAdapter (
             memoryCacheKey(employee.photoUrlSmall)
             crossfade(true)
             placeholder(R.drawable.ic_launcher_foreground)
+            transformations(CenterOnFaceTransformation())
         }
         holder.employeeName.text = "${employee.firstName} ${employee.lastName}"
         holder.employeeTeam.text = employee.team

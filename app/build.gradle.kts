@@ -66,6 +66,8 @@ android {
         targetCompatibility(JavaVersion.VERSION_1_8)
     }
     kotlinOptions {
+        // "-Xjvm-default=all-compatibility" will also work.
+        freeCompilerArgs = listOf("-Xjvm-default=all")
         jvmTarget = "1.8"
     }
     dependenciesInfo {
@@ -99,6 +101,7 @@ dependencies {
 
     // Image loading
     implementation(COIL)
+    implementation("com.google.mlkit:face-detection:16.0.2")
 
     // Hilt
     implementation(Google.dagger.hilt.android)
