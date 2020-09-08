@@ -12,7 +12,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import com.avengers.employeedirectory.R
-import com.avengers.employeedirectory.ui.EmployeeListFragmentDirections.Companion.actionItemListFragmentToEmployeeDetailFragment
+import com.avengers.employeedirectory.ui.EmployeeListFragmentDirections
 import com.avengers.employeedirectory.util.DataState
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.GetEmployeesEvent
@@ -109,7 +109,7 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
             if (getEmployeeEvent != null) {
                 if (!isTablet) {
                     val action =
-                        actionItemListFragmentToEmployeeDetailFragment()
+                            EmployeeListFragmentDirections.actionItemListFragmentToEmployeeDetailFragment()
                     view.findNavController().navigate(action)
                 } else {
                     if (viewModel.currentEmployee.value == null) {

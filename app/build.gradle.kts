@@ -11,7 +11,7 @@ plugins {
 
 android {
     compileSdkVersion(30)
-    buildToolsVersion("30.0.1")
+    buildToolsVersion("30.0.2")
 
     defaultConfig {
         applicationId = "com.avengers.employeedirectory"
@@ -21,6 +21,7 @@ android {
         versionName("1.0")
 
         testInstrumentationRunner = "com.avengers.employeedirectory.CustomHiltTestRunner"
+        signingConfig = signingConfigs.getByName("debug")
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -67,7 +68,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
 }
+
 dependencies {
     // Source compatibility
     implementation(Kotlin.stdlib.jdk8)

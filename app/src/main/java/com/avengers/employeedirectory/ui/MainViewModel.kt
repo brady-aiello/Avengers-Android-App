@@ -13,9 +13,7 @@ import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.*
 import com.avengers.employeedirectory.util.Event
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,59 +38,25 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
             when (stateEvent) {
                 is GetEmployeesEvent -> {
                     repository.getEmployees(stateEvent.forced)
-                        .debounce(500)
-                        .onEach { newDataState ->
-                            if (_dataState.value != newDataState) {
-                                withContext(dispatcherProvider.main()) {
-                                    _dataState.value = newDataState
-                                }
-                            }
-                        }.collect()
+                        .transformStateEvent()
                 }
 
                 is GetEmployeesSortedByTeamEvent -> {
                     repository.getEmployeesSortedByTeam()
-                        .debounce(500)
-                        .onEach { newDataState ->
-                            if (_dataState.value != newDataState) {
-                                withContext(dispatcherProvider.main()) {
-                                    _dataState.value = newDataState
-                                }
-                            }
-                        }.collect()
+                        .transformStateEvent()
+
                 }
                 is GetEmployeesSortedByLastNameEvent -> {
                     repository.getEmployeesSortedByLastName()
-                        .debounce(500)
-                        .onEach { newDataState ->
-                            if (_dataState.value != newDataState) {
-                                withContext(dispatcherProvider.main()) {
-                                    _dataState.value = newDataState
-                                }
-                            }
-                        }.collect()
+                        .transformStateEvent()
                 }
                 is GetEmployeesSortedByFirstNameEvent -> {
                     repository.getEmployeesSortedByFirstName()
-                        .debounce(500)
-                        .onEach { newDataState ->
-                            if (_dataState.value != newDataState) {
-                                withContext(dispatcherProvider.main()) {
-                                    _dataState.value = newDataState
-                                }
-                            }
-                        }.collect()
+                            .transformStateEvent()
                 }
                 is FilterEmployeesByAnyEvent -> {
                     repository.filterByAny(stateEvent.searchTerm)
-                        .debounce(500)
-                        .onEach { newDataState ->
-                            if (_dataState.value != newDataState) {
-                                withContext(dispatcherProvider.main()) {
-                                    _dataState.value = newDataState
-                                }
-                            }
-                        }.collect()
+                            .transformStateEvent()
                 }
                 is GetEmployeeDetailEvent -> {
                     // Don't navigate if we're in landscape mode and the selected employee
@@ -105,4 +69,14 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
             }
         }
     }
+
+    @FlowPreview
+    suspend fun Flow<DataState<List<Employee>>>.transformStateEvent() =
+        this.debounce(500)
+                .distinctUntilChanged()
+                .onEach { newDataState ->
+                    withContext(dispatcherProvider.main()) {
+                        _dataState.value = newDataState
+                    }
+                }.collect()
 }
