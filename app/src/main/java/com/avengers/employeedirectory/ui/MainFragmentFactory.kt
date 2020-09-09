@@ -6,11 +6,12 @@ import coil.ImageLoader
 import javax.inject.Inject
 
 class MainFragmentFactory @Inject constructor(
-    private val imageLoader: ImageLoader): FragmentFactory() {
+    private val imageLoader: ImageLoader,
+    private val centerOnFaceTransformation: CenterOnFaceTransformation): FragmentFactory() {
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         return when(className) {
             EmployeeListFragment::class.java.name -> {
-                EmployeeListFragment(imageLoader)
+                EmployeeListFragment(imageLoader, centerOnFaceTransformation)
             }
             EmployeeDetailFragment::class.java.name -> {
                 EmployeeDetailFragment(imageLoader)

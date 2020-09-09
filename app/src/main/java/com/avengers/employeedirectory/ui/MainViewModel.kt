@@ -44,7 +44,6 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                 is GetEmployeesSortedByTeamEvent -> {
                     repository.getEmployeesSortedByTeam()
                         .transformStateEvent()
-
                 }
                 is GetEmployeesSortedByLastNameEvent -> {
                     repository.getEmployeesSortedByLastName()

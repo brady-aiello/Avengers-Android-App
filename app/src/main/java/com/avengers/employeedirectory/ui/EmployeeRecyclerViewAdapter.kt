@@ -6,16 +6,20 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.avengers.employeedirectory.R
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import kotlinx.coroutines.FlowPreview
 
-class EmployeeRecyclerViewAdapter (
-    private val imageLoader: ImageLoader, var employees: List<Employee> = listOf(),
-    val viewModel: MainViewModel):
+class EmployeeRecyclerViewAdapter(
+    private val imageLoader: ImageLoader,
+    var employees: List<Employee> = listOf(),
+    val viewModel: MainViewModel,
+    private val centerOnFaceTransformation: CenterOnFaceTransformation):
     RecyclerView.Adapter<EmployeeViewHolder>() {
-    var isTablet: Boolean = true
+
+    private var isTablet: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -33,12 +37,11 @@ class EmployeeRecyclerViewAdapter (
             memoryCacheKey(employee.photoUrlSmall)
             crossfade(true)
             placeholder(R.drawable.ic_launcher_foreground)
-            transformations(CenterOnFaceTransformation())
+            transformations(centerOnFaceTransformation)
         }
         holder.employeeName.text = "${employee.firstName} ${employee.lastName}"
         holder.employeeTeam.text = employee.team
         holder.itemView.setOnClickListener {
-
             viewModel.setStateEvent(EmployeesStateEvent.GetEmployeeDetailEvent(employees[position], isTablet))
         }
     }

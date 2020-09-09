@@ -12,7 +12,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import com.avengers.employeedirectory.R
-import com.avengers.employeedirectory.ui.EmployeeListFragmentDirections
 import com.avengers.employeedirectory.util.DataState
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.GetEmployeesEvent
@@ -23,7 +22,9 @@ import kotlinx.coroutines.FlowPreview
 import java.net.UnknownHostException
 
 @AndroidEntryPoint
-class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
+class EmployeeListFragment
+constructor(private val imageLoader: ImageLoader,
+            private val centerOnFaceTransformation: CenterOnFaceTransformation)
     : Fragment() {
 
     companion object {
@@ -127,7 +128,8 @@ class EmployeeListFragment constructor(private val imageLoader: ImageLoader)
 
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerViewAdapter = EmployeeRecyclerViewAdapter(imageLoader, viewModel = viewModel)
+        recyclerViewAdapter = EmployeeRecyclerViewAdapter(imageLoader, viewModel = viewModel,
+        centerOnFaceTransformation = centerOnFaceTransformation)
         recyclerView.adapter = recyclerViewAdapter
     }
 
