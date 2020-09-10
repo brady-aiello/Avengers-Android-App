@@ -20,6 +20,7 @@ import coil.memory.MemoryCache
 import com.google.android.material.button.MaterialButton
 import com.avengers.employeedirectory.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_employee_detail.*
 
 
 @AndroidEntryPoint
@@ -62,35 +63,37 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
                         transformEmployeeType(employee.employeeType)
                 view.findViewById<AppCompatTextView>(R.id.phone_number).text = employee.phoneNumber
                 view.findViewById<AppCompatTextView>(R.id.email).text = employee.emailAddress
-                view.findViewById<AppCompatTextView>(R.id.biography).text = employee.biography
-                view.findViewById<MaterialButton>(R.id.give_kudos_button).setOnClickListener {
-                    val shareIntent = Intent(Intent.ACTION_SEND)
-                    shareIntent.type = "text/*"
+                view.findViewById<AppCompatTextView>(R.id.biography).text = "\"${employee.biography}\""
+                give_kudos_button.visibility = MaterialButton.GONE
 
-                    val packageManager = (activity as AppCompatActivity).packageManager
-                    val resInfo = packageManager.queryIntentActivities(shareIntent, 0)
-                    var linkedIn = false
-                    resInfo.forEach {
-                        val packageName = it.activityInfo.packageName
-                        val activityName = it.activityInfo.name
-                        if (activityName ==
-                                "com.linkedin.android.publishing.sharing.SharingDeepLinkActivity") {
-                            linkedIn = true
-                            val intent = Intent()
-                            intent.component = ComponentName(packageName, it.activityInfo.name)
-                            intent.action = Intent.ACTION_SEND
-                            shareIntent.type = "text/*"
-                            intent.putExtra(Intent.EXTRA_TEXT,
-                                    "@${employee.firstName} ${employee.lastName} has been " +
-                                            "doing a fantastic job! Thanks for being on the team.")
-                            startActivity(intent)
-                        }
-                    }
-                    if (!linkedIn) {
-                        Toast.makeText(activity, "LinkedIn is not installed",
-                                Toast.LENGTH_LONG).show()
-                    }
-                }
+//                view.findViewById<MaterialButton>(R.id.give_kudos_button).setOnClickListener {
+//                    val shareIntent = Intent(Intent.ACTION_SEND)
+//                    shareIntent.type = "text/*"
+//
+//                    val packageManager = (activity as AppCompatActivity).packageManager
+//                    val resInfo = packageManager.queryIntentActivities(shareIntent, 0)
+//                    var linkedIn = false
+//                    resInfo.forEach {
+//                        val packageName = it.activityInfo.packageName
+//                        val activityName = it.activityInfo.name
+//                        if (activityName ==
+//                                "com.linkedin.android.publishing.sharing.SharingDeepLinkActivity") {
+//                            linkedIn = true
+//                            val intent = Intent()
+//                            intent.component = ComponentName(packageName, it.activityInfo.name)
+//                            intent.action = Intent.ACTION_SEND
+//                            shareIntent.type = "text/*"
+//                            intent.putExtra(Intent.EXTRA_TEXT,
+//                                    "@${employee.firstName} ${employee.lastName} has been " +
+//                                            "doing a fantastic job! Thanks for being on the team.")
+//                            startActivity(intent)
+//                        }
+//                    }
+//                    if (!linkedIn) {
+//                        Toast.makeText(activity, "LinkedIn is not installed",
+//                                Toast.LENGTH_LONG).show()
+//                    }
+//                }
             } else {
                 changeViewsVisibility(view, false)
             }

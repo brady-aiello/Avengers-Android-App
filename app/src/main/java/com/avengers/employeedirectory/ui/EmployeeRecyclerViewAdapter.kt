@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
 import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
+import coil.transform.Transformation
 import com.avengers.employeedirectory.R
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.util.EmployeesStateEvent
@@ -37,7 +39,7 @@ class EmployeeRecyclerViewAdapter(
             memoryCacheKey(employee.photoUrlSmall)
             crossfade(true)
             placeholder(R.drawable.ic_launcher_foreground)
-            transformations(centerOnFaceTransformation)
+            transformations(centerOnFaceTransformation, RoundedCornersTransformation(8F))
         }
         holder.employeeName.text = "${employee.firstName} ${employee.lastName}"
         holder.employeeTeam.text = employee.team

@@ -15,11 +15,12 @@
         <androidx.appcompat.widget.AppCompatImageView
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:id="@+id/profile_pic_small"
             tools:src="@mipmap/smart_hulk"
-            android:scaleType="fitStart"
+            android:scaleType="matrix"
             android:padding="8dp"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/employee_full_name"
