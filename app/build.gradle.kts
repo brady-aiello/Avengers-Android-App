@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.squareup.sqldelight")
     kotlin("kapt")
     kotlin("android.extensions")
     kotlin("android")
@@ -23,14 +24,14 @@ android {
         testInstrumentationRunner = "com.avengers.employeedirectory.CustomHiltTestRunner"
         signingConfig = signingConfigs.getByName("debug")
 
-        javaCompileOptions {
+/*        javaCompileOptions {
             annotationProcessorOptions {
                 arguments(mutableMapOf(
                         "room.schemaLocation" to "$projectDir/schemas",
                         "room.incremental" to "true")
                 )
             }
-        }
+        }*/
     }
 
     packagingOptions {
@@ -113,10 +114,10 @@ dependencies {
     implementation(Square.retrofit2.retrofit)
     implementation(JakeWharton.retrofit2.converter.kotlinxSerialization)
 
-    // Room
-    implementation(AndroidX.room.runtime)
-    kapt(AndroidX.room.compiler)
-    implementation(AndroidX.room.ktx)
+    // SQLDelight
+    implementation(Square.sqlDelight.drivers.android)
+    implementation("com.squareup.sqldelight:coroutines-extensions-jvm:1.4.3")
+    testImplementation(Square.sqlDelight.drivers.jdbcSqlite)
 
     // Lifecycle
     implementation(AndroidX.fragmentKtx)
