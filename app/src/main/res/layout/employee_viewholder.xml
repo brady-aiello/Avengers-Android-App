@@ -20,7 +20,7 @@
             android:layout_height="120dp"
             android:id="@+id/profile_pic_small"
             tools:src="@mipmap/smart_hulk"
-            android:scaleType="matrix"
+            android:scaleType="fitCenter"
             android:padding="8dp"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/employee_full_name"

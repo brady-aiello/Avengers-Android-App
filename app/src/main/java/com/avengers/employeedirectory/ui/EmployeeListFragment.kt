@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import coil.ImageLoader
 import com.avengers.employeedirectory.R
 import com.avengers.employeedirectory.util.DataState
@@ -33,6 +34,7 @@ constructor(private val imageLoader: ImageLoader,
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var recyclerViewAdapter: EmployeeRecyclerViewAdapter
+    //private lateinit var root: View
     private var isTablet: Boolean = false
 
     override fun onCreateView(
@@ -53,11 +55,13 @@ constructor(private val imageLoader: ImageLoader,
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //this.root = view
         setupRecyclerView(item_list)
         swipe_refresh.setOnRefreshListener {
             viewModel.setStateEvent(GetEmployeesEvent(forced = true))
         }
-
+        //setExitToFullScreenTransition()
+        //setReturnFromFullScreenTransition()
         viewModel.dataState.observe(viewLifecycleOwner) { dataState ->
             when (dataState) {
                 is DataState.Success -> {
@@ -129,8 +133,14 @@ constructor(private val imageLoader: ImageLoader,
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         recyclerViewAdapter = EmployeeRecyclerViewAdapter(imageLoader, viewModel = viewModel,
-        centerOnFaceTransformation = centerOnFaceTransformation)
+            centerOnFaceTransformation = centerOnFaceTransformation, onEmployeeClickListener = null)
+
         recyclerView.adapter = recyclerViewAdapter
+        //postponeEnterTransition()
+        recyclerView.viewTreeObserver.addOnPreDrawListener {
+            //startPostponedEnterTransition()
+            true
+        }
     }
 
     @FlowPreview
@@ -216,6 +226,15 @@ constructor(private val imageLoader: ImageLoader,
             .show()
     }
 
+    private fun setExitToFullScreenTransition() {
+        exitTransition =
+            TransitionInflater.from(context).inflateTransition(R.transition.employee_list_exit_transition)
+    }
+
+    private fun setReturnFromFullScreenTransition() {
+        reenterTransition =
+            TransitionInflater.from(context).inflateTransition(R.transition.employee_list_return_transition)
+    }
     sealed class SortFilter() {
         object Sort: SortFilter()
         object Filter: SortFilter()

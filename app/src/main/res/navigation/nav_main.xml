@@ -22,6 +22,5 @@
         android:id="@+id/employeeDetailFragment"
         android:name="com.avengers.employeedirectory.ui.EmployeeDetailFragment"
         android:label="EmployeeDetailFragment"
-        tools:layout="@layout/fragment_employee_detail">
-    </fragment>
+        tools:layout="@layout/fragment_employee_detail" />
 </navigation>

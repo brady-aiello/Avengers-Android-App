@@ -21,7 +21,8 @@ import kotlin.coroutines.resumeWithException
 
 
 class CenterOnFaceTransformation @Inject constructor(
-    private val cache: LruCache<String, ByteArray>
+    private val cache: LruCache<String, String>,
+    private val centerType: CenterType=CenterType.LargestSquare
 ): Transformation {
 
     companion object {
@@ -34,11 +35,18 @@ class CenterOnFaceTransformation @Inject constructor(
         // High-accuracy landmark detection and face classification
         val inputByteArray = input.toByteArray()
         val inputByteArrayHash = inputByteArray.toList().hashCode().toString()
-        val cachedTransformation = cache.get(inputByteArrayHash)
-        if (cachedTransformation != null) {
-            return BitmapFactory
-                .decodeByteArray(cachedTransformation, 0, cachedTransformation.size)
+        val cachedRectString = cache.get(inputByteArrayHash)
+        val cachedRect = Rect.unflattenFromString(cachedRectString)
+        if (cachedRect != null) {
+            return Bitmap.createBitmap(
+                input,
+                cachedRect.left,
+                cachedRect.top,
+                cachedRect.width(),
+                cachedRect.height()
+            )
         }
+
         val highAccuracyOpts = FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
                 .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
@@ -50,33 +58,24 @@ class CenterOnFaceTransformation @Inject constructor(
 
         return suspendCancellableCoroutine<Bitmap> { continuation ->
             detector.process(image).addOnSuccessListener { faces ->
+                detector.close()
                 val biggest = faces.maxByOrNull { it.boundingBox.height() }
                 val output: Bitmap
 
                 if (biggest != null) {
                     val boundingBox = biggest.boundingBox
-//                    val square = largestSquare(input, boundingBox)
-                    val square = largestSquareContainingFace(input, boundingBox)
+                    val square = when (centerType) {
+                        CenterType.LargestSquare -> {
+                            largestSquareContainingFace(input, boundingBox)
+                        }
+                        CenterType.SmallestSquare -> {
+                            smallestSquare(input, boundingBox)
+                        }
+                    }
 
-                    val decoder = BitmapRegionDecoder.newInstance(
-                        inputByteArray,
-                        0,
-                        inputByteArray.size,
-                        true
-                    )
-                    val options: BitmapFactory.Options = BitmapFactory.Options()
-                    options.inScaled = false
-                    options.inJustDecodeBounds = true
-                    output = decoder.decodeRegion(square, options)
-/*                    output = Bitmap.createBitmap(
-                        input,
-                        square.left,
-                        square.top,
-                        square.width(),
-                        square.height()
-                    )*/
-                    val imageByteArray = output.toByteArray()
-                    cache.put(inputByteArrayHash, imageByteArray)
+                    output = frameBitmap(inputByteArray, square)
+
+                    cache.put(inputByteArrayHash, square.flattenToString())
                     continuation.resume(output)
                 } else {
                     continuation.resume(input)
@@ -87,6 +86,19 @@ class CenterOnFaceTransformation @Inject constructor(
                 continuation.resumeWithException(e)
             }
         }
+    }
+
+    private fun frameBitmap(inputByteArray: ByteArray, square: Rect): Bitmap {
+        val decoder = BitmapRegionDecoder.newInstance(
+            inputByteArray,
+            0,
+            inputByteArray.size,
+            true
+        )
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inScaled = false
+        options.inJustDecodeBounds = true
+        return decoder.decodeRegion(square, options)
     }
 
     private fun Bitmap.toByteArray() : ByteArray {
@@ -189,5 +201,10 @@ class CenterOnFaceTransformation @Inject constructor(
             right,
             bottom
         )
+    }
+
+    sealed class CenterType {
+        object LargestSquare: CenterType()
+        object SmallestSquare: CenterType()
     }
 }

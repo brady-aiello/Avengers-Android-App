@@ -1,6 +1,7 @@
 package com.avengers.employeedirectory.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,9 @@ class EmployeeRecyclerViewAdapter(
     private val imageLoader: ImageLoader,
     var employees: List<Employee> = listOf(),
     val viewModel: MainViewModel,
-    private val centerOnFaceTransformation: CenterOnFaceTransformation):
+    private val centerOnFaceTransformation: CenterOnFaceTransformation,
+    private val onEmployeeClickListener: ((view: View, employee: Employee) -> Unit)?
+):
     RecyclerView.Adapter<EmployeeViewHolder>() {
 
     private var isTablet: Boolean = true
@@ -35,6 +38,7 @@ class EmployeeRecyclerViewAdapter(
     @FlowPreview
     override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
         val employee = employees[position]
+        //holder.employeePhoto.transitionName = employee.uuid
         holder.employeePhoto.load(employee.photoUrlSmall, imageLoader) {
             memoryCacheKey(employee.photoUrlSmall)
             crossfade(true)
@@ -45,6 +49,7 @@ class EmployeeRecyclerViewAdapter(
         holder.employeeTeam.text = employee.team
         holder.itemView.setOnClickListener {
             viewModel.setStateEvent(EmployeesStateEvent.GetEmployeeDetailEvent(employees[position], isTablet))
+            //onEmployeeClickListener?.let { it(holder.employeePhoto, employee) }
         }
     }
 }
