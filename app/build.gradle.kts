@@ -3,15 +3,19 @@ plugins {
     id("kotlin-android")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.squareup.sqldelight")
     kotlin("kapt")
     kotlin("android.extensions")
     kotlin("android")
-    kotlin("plugin.serialization") version "1.4.0"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 android {
     compileSdkVersion(30)
     buildToolsVersion("30.0.2")
+    buildFeatures {
+        dataBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.avengers.employeedirectory"
@@ -23,14 +27,14 @@ android {
         testInstrumentationRunner = "com.avengers.employeedirectory.CustomHiltTestRunner"
         signingConfig = signingConfigs.getByName("debug")
 
-        javaCompileOptions {
+/*        javaCompileOptions {
             annotationProcessorOptions {
                 arguments(mutableMapOf(
                         "room.schemaLocation" to "$projectDir/schemas",
                         "room.incremental" to "true")
                 )
             }
-        }
+        }*/
     }
 
     packagingOptions {
@@ -90,7 +94,8 @@ dependencies {
     implementation(Google.android.material)
 
     // Serialization
-    implementation(KotlinX.serialization.core)
+    //implementation(KotlinX.serialization.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2")
 
     // Coroutines
     implementation(KotlinX.coroutines.core)
@@ -113,10 +118,10 @@ dependencies {
     implementation(Square.retrofit2.retrofit)
     implementation(JakeWharton.retrofit2.converter.kotlinxSerialization)
 
-    // Room
-    implementation(AndroidX.room.runtime)
-    kapt(AndroidX.room.compiler)
-    implementation(AndroidX.room.ktx)
+    // SQLDelight
+    implementation(Square.sqlDelight.drivers.android)
+    implementation("com.squareup.sqldelight:coroutines-extensions-jvm:1.4.3")
+    testImplementation(Square.sqlDelight.drivers.jdbcSqlite)
 
     // Lifecycle
     implementation(AndroidX.fragmentKtx)

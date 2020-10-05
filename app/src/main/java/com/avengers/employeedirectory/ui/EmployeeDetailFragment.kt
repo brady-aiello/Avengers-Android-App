@@ -1,26 +1,22 @@
 package com.avengers.employeedirectory.ui
 
-import android.content.ComponentName
-import android.content.Intent
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.cardview.widget.CardView
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.load
-import coil.memory.MemoryCache
-import com.google.android.material.button.MaterialButton
 import com.avengers.employeedirectory.R
+import com.avengers.employeedirectory.async.DispatcherProvider
+import com.avengers.employeedirectory.databinding.FragmentEmployeeDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_employee_detail.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -28,97 +24,49 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
 
     private val viewModel: MainViewModel by activityViewModels()
 
+    @Inject
+    lateinit var coroutineDispatcherProvider: DispatcherProvider
+
+    private var isTablet = false
+    private lateinit var binding: FragmentEmployeeDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_employee_detail, container, false)
-        changeViewsVisibility(view, false)
-        return view
+        binding = FragmentEmployeeDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    @ExperimentalCoilApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.currentEmployee.observe(viewLifecycleOwner, Observer { employee ->
-            if (employee != null) {
-                changeViewsVisibility(view, true)
-                view.findViewById<AppCompatImageView>(R.id.profile_pic_large)
-                        .load(employee.photoUrlLarge, imageLoader) {
-                            if (imageLoader.memoryCache[MemoryCache.Key(employee.photoUrlLarge)] == null) {
-                                crossfade(1000)
-                                placeholder(R.drawable.ic_launcher_foreground)
-                                memoryCacheKey(employee.photoUrlLarge)
-                            }
-                            else {
-                                crossfade(1000)
-                                placeholder(R.drawable.ic_launcher_foreground)
-                            }
-                        }
-                view.findViewById<AppCompatTextView>(R.id.employee_full_name).text =
-                        "${employee.firstName} ${employee.lastName}"
-                view.findViewById<AppCompatTextView>(R.id.team).text = employee.team
-                view.findViewById<AppCompatTextView>(R.id.employee_type).text =
-                        transformEmployeeType(employee.employeeType)
-                view.findViewById<AppCompatTextView>(R.id.phone_number).text = employee.phoneNumber
-                view.findViewById<AppCompatTextView>(R.id.email).text = employee.emailAddress
-                view.findViewById<AppCompatTextView>(R.id.biography).text = "\"${employee.biography}\""
-                give_kudos_button.visibility = MaterialButton.GONE
-
-//                view.findViewById<MaterialButton>(R.id.give_kudos_button).setOnClickListener {
-//                    val shareIntent = Intent(Intent.ACTION_SEND)
-//                    shareIntent.type = "text/*"
-//
-//                    val packageManager = (activity as AppCompatActivity).packageManager
-//                    val resInfo = packageManager.queryIntentActivities(shareIntent, 0)
-//                    var linkedIn = false
-//                    resInfo.forEach {
-//                        val packageName = it.activityInfo.packageName
-//                        val activityName = it.activityInfo.name
-//                        if (activityName ==
-//                                "com.linkedin.android.publishing.sharing.SharingDeepLinkActivity") {
-//                            linkedIn = true
-//                            val intent = Intent()
-//                            intent.component = ComponentName(packageName, it.activityInfo.name)
-//                            intent.action = Intent.ACTION_SEND
-//                            shareIntent.type = "text/*"
-//                            intent.putExtra(Intent.EXTRA_TEXT,
-//                                    "@${employee.firstName} ${employee.lastName} has been " +
-//                                            "doing a fantastic job! Thanks for being on the team.")
-//                            startActivity(intent)
-//                        }
-//                    }
-//                    if (!linkedIn) {
-//                        Toast.makeText(activity, "LinkedIn is not installed",
-//                                Toast.LENGTH_LONG).show()
-//                    }
-//                }
-            } else {
-                changeViewsVisibility(view, false)
-            }
-        })
+        isTablet = requireContext().resources.getBoolean(R.bool.isTablet)
+        val employee = viewModel.currentEmployee.value
+        if (employee != null) {
+            binding.employee = employee
+            binding.employeeType = transformEmployeeType(employee.employeeType)
+            binding.executePendingBindings()
+            loadImage(binding.profilePicLarge)
+        }
+        if (!isTablet) {
+            sharedElementEnterTransition = TransitionInflater.from(requireContext())
+                .inflateTransition(R.transition.shared_image)
+        }
+        binding.executePendingBindings()
     }
 
-    private fun changeViewsVisibility(view: View, visible: Boolean) {
-        view.findViewById<CardView>(R.id.profile_photo_card).visibility =
-                if (visible) CardView.VISIBLE else CardView.GONE
-        view.findViewById<AppCompatImageView>(R.id.profile_pic_large).visibility =
-                if (visible) AppCompatImageView.VISIBLE else AppCompatImageView.GONE
-        view.findViewById<AppCompatTextView>(R.id.employee_full_name).visibility =
-                if (visible) AppCompatTextView.VISIBLE else AppCompatTextView.GONE
-        view.findViewById<AppCompatTextView>(R.id.team).visibility =
-                if (visible) AppCompatTextView.VISIBLE else AppCompatTextView.GONE
-        view.findViewById<AppCompatTextView>(R.id.employee_type).visibility =
-                if (visible) AppCompatTextView.VISIBLE else AppCompatTextView.GONE
-        view.findViewById<AppCompatTextView>(R.id.phone_number).visibility =
-                if (visible) AppCompatTextView.VISIBLE else AppCompatTextView.GONE
-        view.findViewById<AppCompatTextView>(R.id.email).visibility =
-                if (visible) AppCompatTextView.VISIBLE else AppCompatTextView.GONE
-        view.findViewById<AppCompatTextView>(R.id.biography).visibility =
-                if (visible) AppCompatTextView.VISIBLE else AppCompatTextView.GONE
-        view.findViewById<MaterialButton>(R.id.give_kudos_button).visibility =
-                if (visible) MaterialButton.VISIBLE else MaterialButton.GONE
+    @ExperimentalCoilApi
+    private fun loadImage(imageView: ImageView) {
+        imageView
+            .load(binding.employee?.photoUrlLarge, imageLoader) {
+                if (!isTablet) {
+                    val key = viewModel.memCacheKey.value
+                    if (key != null) {
+                        placeholderMemoryCacheKey(key)
+                    }
+                }
+                memoryCacheKey("large-${binding.employee?.photoUrlLarge}")
+            }
     }
 
     private fun transformEmployeeType(employeeType: String): String {
@@ -129,4 +77,14 @@ class EmployeeDetailFragment constructor(private val imageLoader: ImageLoader) :
             else -> employeeType
         }
     }
+}
+
+@BindingAdapter("app:visibilityBy")
+fun <T> nonNullVisibility(view: View, item: T?) {
+    view.visibility = if (item != null) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("app:visibilityBy")
+fun <T> transitionName(view: View, item: T?) {
+    view.visibility = if (item != null) View.VISIBLE else View.GONE
 }

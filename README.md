@@ -2,7 +2,7 @@
 ## Project Overview
 This is an MVI sample app I like to keep around for trying out different approaches to databases, architecture components, asynchronous programming, etc.
 
-<img src="media/avengers-demo.gif" alt="drawing" width="300"/>
+<img src="media/master-detail-animation-correct.gif" alt="drawing" width="300"/>
 
 Recently I also started cropping images using facial recognition. Google's ML-Kit made this fairly simple.
 

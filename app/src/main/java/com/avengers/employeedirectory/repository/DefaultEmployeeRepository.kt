@@ -1,8 +1,8 @@
 package com.avengers.employeedirectory.repository
 
 import android.content.Context
+import com.avengers.employeedirectory.Database
 import com.avengers.employeedirectory.db.CacheMapper
-import com.avengers.employeedirectory.db.EmployeesDao
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.network.EmployeeService
 import com.avengers.employeedirectory.network.NetworkMapper
@@ -23,7 +23,7 @@ interface EmployeeRepository {
 }
 
 class DefaultEmployeeRepository constructor(@ApplicationContext private val appContext: Context,
-                                            private val employeesDao: EmployeesDao,
+                                            private val employeesDataBase: Database,
                                             private val employeeService: EmployeeService,
                                             private val cacheMapper: CacheMapper,
                                             private val networkMapper: NetworkMapper): EmployeeRepository {
@@ -44,9 +44,12 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
                     val employeeNetworkEntities = employeeService.getEmployees().employees
                     val employees = networkMapper.mapFromEntities(employeeNetworkEntities)
                     val employeeCacheEntities = cacheMapper.mapToEntities(employees)
-                    employeesDao.insertAll(employeeCacheEntities)
+                    employeeCacheEntities.forEach {
+                        employeesDataBase.employeesEntityQueries.insert(it)
+                    }
                 }
-                val cachedEmployees = employeesDao.getEmployeesSortedByLastName()
+                val cachedEmployees = employeesDataBase.employeesEntityQueries.getEmployeesSortedByLastName()
+                    .executeAsList()
                 if (cachedEmployees.isNullOrEmpty()) {
                     emit(DataState.Empty)
                 } else {
@@ -62,7 +65,10 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
         flow {
             emit(DataState.Loading)
             try {
-                val cachedEmployees = employeesDao.getEmployeesSortedByLastName()
+                val cachedEmployees = employeesDataBase
+                    .employeesEntityQueries
+                    .getEmployeesSortedByLastName()
+                    .executeAsList()
                 if (cachedEmployees.isNullOrEmpty()) {
                     emit(DataState.Empty)
                 } else {
@@ -77,7 +83,10 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
         flow {
             emit(DataState.Loading)
             try {
-                val cachedEmployees = employeesDao.getEmployeesSortedByFirstName()
+                val cachedEmployees = employeesDataBase
+                    .employeesEntityQueries
+                    .getEmployeesSortedByFirstName()
+                    .executeAsList()
                 if (cachedEmployees.isNullOrEmpty()) {
                     emit(DataState.Empty)
                 } else {
@@ -92,7 +101,10 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
         flow {
             emit(DataState.Loading)
             try {
-                val cachedEmployees = employeesDao.getEmployeesSortedByTeam()
+                val cachedEmployees = employeesDataBase
+                    .employeesEntityQueries
+                    .getEmployeesSortedByTeam()
+                    .executeAsList()
                 if (cachedEmployees.isNullOrEmpty()) {
                     emit(DataState.Empty)
                 } else {
@@ -107,7 +119,10 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
         flow {
             emit(DataState.Searching)
             try {
-                val cachedEmployees = employeesDao.filterEmployeesByAny("%$searchTerm%")
+                val cachedEmployees = employeesDataBase
+                    .employeesEntityQueries
+                    .filterEmployeesByAny(searchTerm)
+                    .executeAsList()
                 if (cachedEmployees.isNullOrEmpty()) {
                     emit(DataState.Searching)
                 } else {
@@ -122,7 +137,10 @@ class DefaultEmployeeRepository constructor(@ApplicationContext private val appC
         flow {
             emit(DataState.Loading)
             try {
-                val cachedEmployee = employeesDao.getEmployee(id)
+                val cachedEmployee = employeesDataBase
+                    .employeesEntityQueries
+                    .getEmployeeByUUID(id)
+                    .executeAsOne()
                 emit(DataState.Success(cacheMapper.mapFromEntity(cachedEmployee)))
             } catch (e: Exception) {
                 emit(DataState.Error(e))

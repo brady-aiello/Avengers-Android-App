@@ -1,116 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.MainActivity"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="2dp">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="employee"
+            type="com.avengers.employeedirectory.models.Employee" />
+        <variable
+            name="employeeType"
+            type="String" />
+        <variable
+            name="transitionSuffix"
+            type="String" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:clipToPadding="false"
+        tools:context=".ui.MainActivity">
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_page_master_constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/profile_photo_card"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/profile_pic_large"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:padding="8dp"
+                android:transitionName="@{@string/transition_name(@string/pic, employee.uuid)}"
+                app:visibilityBy="@{employee}"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@mipmap/smart_hulk" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/employee_detail_card"
+                android:transitionName="@{@string/transition_name(@string/card, employee.uuid)}"
+                app:visibilityBy="@{employee}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".ui.MainActivity"
-                app:cardElevation="10dp"
-                android:layout_margin="8dp"
+                android:clipToPadding="false"
+                android:paddingBottom="8dp"
                 app:cardCornerRadius="2dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:cardElevation="6dp"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <androidx.appcompat.widget.AppCompatImageView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_pic_large"
+                tools:context=".ui.MainActivity">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:id="@+id/profile_pic_large"
-                    tools:src="@mipmap/smart_hulk"
-                    android:scaleType="fitCenter"
-                    android:padding="8dp"/>
-            </androidx.cardview.widget.CardView>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/employee_full_name"
-                app:layout_constraintTop_toBottomOf="@id/profile_photo_card"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                tools:text="Bruce Banner"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/team"
-                app:layout_constraintTop_toBottomOf="@id/employee_full_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="Demolition"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/employee_type"
-                app:layout_constraintTop_toBottomOf="@id/team"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="FULL TIME"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/phone_number"
-                app:layout_constraintTop_toBottomOf="@+id/employee_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="5553280123"
-                android:autoLink="phone"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/email"
-                app:layout_constraintTop_toBottomOf="@+id/phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="smash@avengers.org"
-                android:autoLink="email"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/biography"
-                app:layout_constraintTop_toBottomOf="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                tools:text="What have I done?!"
-                android:autoLink="email"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
-            <com.google.android.material.button.MaterialButton
-                app:layout_constraintTop_toBottomOf="@id/biography"
-                app:layout_constraintStart_toStartOf="@id/biography"
-                android:id="@+id/give_kudos_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Give kudos on LinkedIN"
-                app:cardCornerRadius="2dp"/>
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/employee_full_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:visibilityBy="@{employee}"
+                        android:text="@{@string/full_name(employee.firstName, employee.lastName)}"
+                        tools:text="Bruce Banner" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/team"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="16sp"
+                        app:visibilityBy="@{employee}"
+                        android:text="@{employee.team}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/employee_full_name"
+                        tools:text="Demolition" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/employee_type_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/team"
+                        app:visibilityBy="@{employee}"
+                        android:text="@{employeeType}"
+                        tools:text="FULL TIME" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoLink="phone"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toBottomOf="@+id/employee_type_textView"
+                        app:visibilityBy="@{employee}"
+                        android:text="@{employee.phoneNumber}"
+                        tools:text="5553280123" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:autoLink="email"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toBottomOf="@+id/phone_number"
+                        app:visibilityBy="@{employee}"
+                        android:text="@{employee.emailAddress}"
+                        tools:text="smash@avengers.org" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/biography"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:autoLink="email"
+                        android:textSize="24sp"
+                        app:layout_constraintTop_toBottomOf="@+id/email"
+                        app:visibilityBy="@{employee}"
+                        android:text="@{employee.biography}"
+                        tools:text="What have I done?!" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</androidx.cardview.widget.CardView>
+</layout>

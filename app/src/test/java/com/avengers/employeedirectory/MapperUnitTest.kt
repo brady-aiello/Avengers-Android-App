@@ -1,10 +1,10 @@
 package com.avengers.employeedirectory
 
 import com.avengers.employeedirectory.db.CacheMapper
-import com.avengers.employeedirectory.db.EmployeeCacheEntity
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.network.EmployeeNetworkEntity
 import com.avengers.employeedirectory.network.NetworkMapper
+import com.avengers.employeedirectory.sqldelight.EmployeeCacheEntity
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -116,5 +116,23 @@ class MapperUnitTest {
     fun employeesToEmployeesCache() {
         val employeesCacheAnswer = cacheMapper.mapToEntities(employees)
         assertEquals(employeesCache, employeesCacheAnswer)
+    }
+
+    fun String.studliest(): String {
+        val stringBuilder = StringBuilder()
+        this.forEachIndexed { index, c ->
+            stringBuilder.append(if (index % 2 == 0) c.toLowerCase() else c.toUpperCase())}
+        return stringBuilder.toString()
+    }
+
+    private fun String.studly(): String {
+        return this.mapIndexed{ index, c ->
+            (if (index % 2 == 0) c.toLowerCase() else c.toUpperCase())}
+            .joinToString("")
+    }
+
+    @Test
+    fun studlyTest() {
+        val hello = "hello".studliest()
     }
 }

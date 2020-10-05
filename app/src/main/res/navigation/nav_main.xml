@@ -12,10 +12,6 @@
         <action
             android:id="@+id/action_itemListFragment_to_employeeDetailFragment"
             app:destination="@id/employeeDetailFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/employeeListFragment" />
     </fragment>
     <fragment

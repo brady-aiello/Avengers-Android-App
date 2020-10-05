@@ -1,0 +1,55 @@
+CREATE TABLE EmployeeCacheEntity(
+    biography TEXT NOT NULL,
+    emailAddress TEXT NOT NULL,
+    employeeType TEXT NOT NULL,
+    firstName TEXT NOT NULL,
+    lastName TEXT NOT NULL,
+    phoneNumber TEXT NOT NULL,
+    photoUrlLarge TEXT NOT NULL,
+    photoUrlSmall TEXT NOT NULL,
+    team TEXT NOT NULL,
+    uuid TEXT PRIMARY KEY
+);
+
+insert:
+INSERT OR REPLACE INTO EmployeeCacheEntity(
+    biography,
+    emailAddress,
+    employeeType,
+    firstName,
+    lastName,
+    phoneNumber,
+    photoUrlLarge,
+    photoUrlSmall,
+    team,
+    uuid
+)
+VALUES ?;
+
+getEmployeesSortedByTeam:
+SELECT * FROM EmployeeCacheEntity ORDER BY team;
+
+getEmployeesSortedByLastName:
+SELECT * FROM EmployeeCacheEntity ORDER BY lastName ASC;
+
+getEmployeesSortedByFirstName:
+SELECT * FROM EmployeeCacheEntity ORDER BY firstName ASC;
+
+getEmployeeByUUID:
+SELECT * FROM EmployeeCacheEntity WHERE uuid = ?;
+
+filterEmployeesByAny:
+SELECT *
+FROM EmployeeCacheEntity
+WHERE biography LIKE ('%' || :searchTerm || '%')
+OR emailAddress LIKE ('%' || :searchTerm || '%')
+OR employeeType LIKE ('%' || :searchTerm || '%')
+OR firstName LIKE ('%' || :searchTerm || '%')
+OR lastName LIKE ('%' || :searchTerm || '%')
+OR phoneNumber LIKE ('%' || :searchTerm || '%')
+OR photoUrlLarge LIKE ('%' || :searchTerm || '%')
+OR photoUrlSmall LIKE ('%' || :searchTerm || '%')
+OR team LIKE ('%' || :searchTerm || '%')
+OR uuid LIKE ('%' || :searchTerm || '%');
+
+

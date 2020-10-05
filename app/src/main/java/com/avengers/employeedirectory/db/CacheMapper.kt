@@ -2,6 +2,7 @@ package com.avengers.employeedirectory.db
 
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.util.EntityMapper
+import com.avengers.employeedirectory.sqldelight.EmployeeCacheEntity
 import javax.inject.Inject
 
 class CacheMapper @Inject constructor(): EntityMapper<EmployeeCacheEntity, Employee>() {

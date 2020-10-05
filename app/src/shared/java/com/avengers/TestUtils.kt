@@ -1,7 +1,7 @@
 package com.avengers
 
 import com.avengers.employeedirectory.db.CacheMapper
-import com.avengers.employeedirectory.db.EmployeeCacheEntity
+import com.avengers.employeedirectory.sqldelight.EmployeeCacheEntity
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.network.NetworkMapper
 
@@ -50,18 +50,23 @@ private val networkMapper = NetworkMapper()
 val testCacheEmployees = cacheMapper.mapToEntities(testEmployees)
 val testNetworkEmployees = networkMapper.mapToEntities(testEmployees)
 
+
+fun String.like(term: String): Boolean {
+    return this.toLowerCase().contains(term.toLowerCase())
+}
+
 fun List<EmployeeCacheEntity>.filterByAny(term: String) = filter {
-    it.biography.contains(term)
-    it.emailAddress.contains(term)
-    it.employeeType.contains(term)
-    it.firstName.contains(term)
-    it.lastName.contains(term)
+    it.biography.like(term) ||
+    it.emailAddress.like(term) ||
+    it.employeeType.like(term) ||
+    it.firstName.like(term) ||
+    it.lastName.like(term)
 }
 
 fun List<Employee>.filterByAnyTerm(term: String) = filter {
-    it.biography.contains(term)
-    it.emailAddress.contains(term)
-    it.employeeType.contains(term)
-    it.firstName.contains(term)
-    it.lastName.contains(term)
+    it.biography.like(term) ||
+    it.emailAddress.like(term) ||
+    it.employeeType.like(term) ||
+    it.firstName.like(term) ||
+    it.lastName.like(term)
 }

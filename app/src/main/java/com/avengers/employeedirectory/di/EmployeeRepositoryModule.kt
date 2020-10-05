@@ -1,8 +1,8 @@
 package com.avengers.employeedirectory.di
 
 import android.content.Context
+import com.avengers.employeedirectory.Database
 import com.avengers.employeedirectory.db.CacheMapper
-import com.avengers.employeedirectory.db.EmployeesDao
 import com.avengers.employeedirectory.network.EmployeeService
 import com.avengers.employeedirectory.network.NetworkMapper
 import com.avengers.employeedirectory.repository.DefaultEmployeeRepository
@@ -22,10 +22,10 @@ object EmployeeRepositoryModule {
     @Provides
     fun provideEmployeeRepository(
         @ApplicationContext context: Context,
-        employeesDao: EmployeesDao,
+        employeesDatabase: Database,
         employeeService: EmployeeService,
         cacheMapper: CacheMapper,
         networkMapper: NetworkMapper
     ): EmployeeRepository =
-        DefaultEmployeeRepository(context, employeesDao, employeeService, cacheMapper, networkMapper)
+        DefaultEmployeeRepository(context, employeesDatabase, employeeService, cacheMapper, networkMapper)
 }

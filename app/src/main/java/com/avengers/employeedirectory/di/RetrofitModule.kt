@@ -1,8 +1,11 @@
 package com.avengers.employeedirectory.di
 
 import android.content.Context
+import android.transition.TransitionInflater
 import coil.ImageLoader
+import coil.request.CachePolicy
 import coil.util.CoilUtils
+import com.avengers.employeedirectory.R
 import com.avengers.employeedirectory.network.EmployeeService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -73,7 +76,10 @@ object RetrofitModule {
     // Give coil a separate cache from the injected OkHttpClient
     fun provideCoilImageLoader(@ApplicationContext context: Context): ImageLoader {
         return ImageLoader.Builder(context)
-            .crossfade(true)
+            .allowHardware(false)
+            .crossfade(false)
+//            .diskCachePolicy(CachePolicy.DISABLED)
+//            .memoryCachePolicy(CachePolicy.DISABLED)
             .okHttpClient {
                 OkHttpClient.Builder()
                     .cache(CoilUtils.createDefaultCache(context))

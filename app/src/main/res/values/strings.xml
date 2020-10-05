@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Avengers</string>
     <string name="full_name">%1$s %2$s</string>
+    <string name="pic">pic</string>
+    <string name="card">card</string>
+    <string name="transition_name">%1$s-%2$s</string>
 </resources>
