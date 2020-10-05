@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.memory.MemoryCache
 import com.avengers.employeedirectory.async.DispatcherProvider
 import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.repository.EmployeeRepository
 import com.avengers.employeedirectory.util.DataState
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.*
-import com.avengers.employeedirectory.util.Event
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,12 +22,12 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                                                  private val dispatcherProvider: DispatcherProvider):
     ViewModel() {
 
+    val memCacheKey = MutableLiveData<MemoryCache.Key>()
+
     private val _dataState: MutableLiveData<DataState<List<Employee>>> = MutableLiveData()
     val dataState: LiveData<DataState<List<Employee>>>
         get() = _dataState
-    private val _oneTimeNavigateEvent: MutableLiveData<Event<GetEmployeeDetailEvent>> = MutableLiveData()
 
-    val oneTimeNavigateEvent: LiveData<Event<GetEmployeeDetailEvent>> = _oneTimeNavigateEvent
     private val _currentEmployee: MutableLiveData<Employee> = MutableLiveData()
     val currentEmployee: LiveData<Employee>
         get() = _currentEmployee
@@ -62,7 +62,6 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                     // hasn't changed.
                     if (!stateEvent.isTablet || _currentEmployee.value != stateEvent.employee) {
                         _currentEmployee.postValue(stateEvent.employee)
-                        _oneTimeNavigateEvent.postValue(Event(stateEvent))
                     }
                 }
             }

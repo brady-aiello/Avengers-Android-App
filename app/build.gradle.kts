@@ -7,12 +7,15 @@ plugins {
     kotlin("kapt")
     kotlin("android.extensions")
     kotlin("android")
-    kotlin("plugin.serialization") version "1.4.0"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 android {
     compileSdkVersion(30)
     buildToolsVersion("30.0.2")
+    buildFeatures {
+        dataBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.avengers.employeedirectory"
@@ -91,7 +94,8 @@ dependencies {
     implementation(Google.android.material)
 
     // Serialization
-    implementation(KotlinX.serialization.core)
+    //implementation(KotlinX.serialization.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2")
 
     // Coroutines
     implementation(KotlinX.coroutines.core)

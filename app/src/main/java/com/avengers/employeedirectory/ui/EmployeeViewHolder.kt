@@ -1,13 +1,12 @@
 package com.avengers.employeedirectory.ui
 
-import android.view.View
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.avengers.employeedirectory.R
+import com.avengers.employeedirectory.databinding.EmployeeViewholderBinding
+import com.avengers.employeedirectory.models.Employee
 
-class EmployeeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-    var employeePhoto: AppCompatImageView = itemView.findViewById(R.id.profile_pic_small)
-    var employeeName: AppCompatTextView = itemView.findViewById(R.id.employee_full_name)
-    var employeeTeam: AppCompatTextView = itemView.findViewById(R.id.team)
+class EmployeeViewHolder(val binding: EmployeeViewholderBinding): RecyclerView.ViewHolder(binding.root) {
+    fun bind(employee: Employee) {
+        binding.employee = employee
+        binding.executePendingBindings()
+    }
 }

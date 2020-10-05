@@ -1,8 +1,14 @@
 package com.avengers.employeedirectory.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.serialization.Serializable
+
 // EmployeeCacheEntity: DB domain model
 // EmployeeNetworkEntity: network domain model
 // Employee: In memory domain model
+@Serializable
+@Parcelize
 data class Employee(
     val biography: String,
     val emailAddress: String,
@@ -14,4 +20,4 @@ data class Employee(
     val photoUrlSmall: String,
     val team: String,
     val uuid: String
-)
+): Parcelable

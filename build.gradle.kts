@@ -8,7 +8,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.0-alpha10")
+        classpath("com.android.tools.build:gradle:4.2.0-alpha12")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath(Square.sqlDelight.gradlePlugin)
         classpath(Google.dagger.hilt.android.gradlePlugin)

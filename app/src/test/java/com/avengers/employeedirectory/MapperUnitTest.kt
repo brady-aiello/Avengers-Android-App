@@ -117,4 +117,22 @@ class MapperUnitTest {
         val employeesCacheAnswer = cacheMapper.mapToEntities(employees)
         assertEquals(employeesCache, employeesCacheAnswer)
     }
+
+    fun String.studliest(): String {
+        val stringBuilder = StringBuilder()
+        this.forEachIndexed { index, c ->
+            stringBuilder.append(if (index % 2 == 0) c.toLowerCase() else c.toUpperCase())}
+        return stringBuilder.toString()
+    }
+
+    private fun String.studly(): String {
+        return this.mapIndexed{ index, c ->
+            (if (index % 2 == 0) c.toLowerCase() else c.toUpperCase())}
+            .joinToString("")
+    }
+
+    @Test
+    fun studlyTest() {
+        val hello = "hello".studliest()
+    }
 }

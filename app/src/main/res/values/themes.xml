@@ -12,14 +12,23 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 
     <style name="Theme.EmployeeDirectory.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+
     </style>
 
-    <style name="Theme.EmployeeDirectory.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.EmployeeDirectory.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
 
-    <style name="Theme.EmployeeDirectory.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.EmployeeDirectory.PopupOverlay"
+        parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
 </resources>

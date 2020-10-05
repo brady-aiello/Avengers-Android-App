@@ -12,15 +12,12 @@
         <action
             android:id="@+id/action_itemListFragment_to_employeeDetailFragment"
             app:destination="@id/employeeDetailFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/employeeListFragment" />
     </fragment>
     <fragment
         android:id="@+id/employeeDetailFragment"
         android:name="com.avengers.employeedirectory.ui.EmployeeDetailFragment"
         android:label="EmployeeDetailFragment"
-        tools:layout="@layout/fragment_employee_detail" />
+        tools:layout="@layout/fragment_employee_detail">
+    </fragment>
 </navigation>
