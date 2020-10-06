@@ -142,7 +142,7 @@ constructor(private val imageLoader: ImageLoader,
     private fun navigate(binding: EmployeeViewholderBinding, employee: Employee) {
         val key = binding.profilePicSmall.metadata?.memoryCacheKey
         viewModel.memCacheKey.value = key
-        viewModel.setStateEvent(EmployeesStateEvent.GetEmployeeDetailEvent(employee, isTablet))
+        viewModel.currentEmployee.value = employee
 
         if (!isTablet) {
             val extras =

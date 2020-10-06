@@ -104,17 +104,9 @@ class MainViewModelTest {
         val employee = testEmployees.filter { it.lastName == "Stark" }[0]
 
         mainViewModel
-            .setStateEvent(EmployeesStateEvent.GetEmployeeDetailEvent(employee))
+            .currentEmployee.value = employee
         assertEquals(employee,
             mainViewModel.currentEmployee.getOrAwaitValue())
-        var navEventEmployee = mainViewModel.oneTimeNavigateEvent.getOrAwaitValue()
-            .getContentIfNotHandled()?.employee
-        // Got the same employee propagated to the one time nav event
-        assertEquals(employee, navEventEmployee)
-        navEventEmployee = mainViewModel.oneTimeNavigateEvent.getOrAwaitValue()
-            .getContentIfNotHandled()?.employee
-        // After the value is read once, we can't read it again.
-        assertNull(navEventEmployee)
     }
 
     @Module

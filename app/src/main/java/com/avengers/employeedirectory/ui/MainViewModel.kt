@@ -28,9 +28,7 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
     val dataState: LiveData<DataState<List<Employee>>>
         get() = _dataState
 
-    private val _currentEmployee: MutableLiveData<Employee> = MutableLiveData()
-    val currentEmployee: LiveData<Employee>
-        get() = _currentEmployee
+    val currentEmployee: MutableLiveData<Employee> = MutableLiveData()
 
     @FlowPreview
     fun setStateEvent(stateEvent: EmployeesStateEvent) {
@@ -56,13 +54,6 @@ class MainViewModel @ViewModelInject constructor(private val repository: Employe
                 is FilterEmployeesByAnyEvent -> {
                     repository.filterByAny(stateEvent.searchTerm)
                             .transformStateEvent()
-                }
-                is GetEmployeeDetailEvent -> {
-                    // Don't navigate if we're in landscape mode and the selected employee
-                    // hasn't changed.
-                    if (!stateEvent.isTablet || _currentEmployee.value != stateEvent.employee) {
-                        _currentEmployee.postValue(stateEvent.employee)
-                    }
                 }
             }
         }
