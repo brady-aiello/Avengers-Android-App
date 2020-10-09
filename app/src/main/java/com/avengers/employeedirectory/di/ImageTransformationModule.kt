@@ -1,6 +1,5 @@
 package com.avengers.employeedirectory.di
 
-import android.graphics.Rect
 import android.util.LruCache
 import com.avengers.employeedirectory.ui.CenterOnFaceTransformation
 import dagger.Module
@@ -22,6 +21,6 @@ object ImageTransformationModule {
     @Provides
     fun provideCenterOnFaceTransformation(cache: LruCache<String, String>):
             CenterOnFaceTransformation {
-        return CenterOnFaceTransformation(cache)
+        return CenterOnFaceTransformation(cache, 65)
     }
 }
