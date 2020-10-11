@@ -15,13 +15,12 @@ Recently I also started cropping images using facial recognition. Google's ML-Ki
 - Hilt Dependency Injection
 - Navigation Component with smooth fragment slide-in / slide-out animations
 - Cached images with Coil
-- Repository pattern with Retrofit2 and a Room (SQLite) local database
+- Repository pattern with Retrofit2 and a SQLDelight for the local database
 - 6 hour cache invalidation strategy (unless you force a download with Swipe-Refresh)
 - Sorting employees by first name, last name, or team
 - Search for employees across all fields
 - Auto-call employee
 - Auto-email employee
-- Share-To-LinkedIn feature prepopulates a LinkedIn post with "@<employee's name> has been doing a fantastic job! Thanks for being on the team."
 - Master - Detail for Phone (Click an employee, and go to their full info page)
 - Master - Detail for Tablet
 - Error handling
@@ -53,7 +52,7 @@ exposes.
 
 ## Technologies
 
-### Android Studio 4.0 canary 07
+### Android Studio 4.2 canary 13
 
 ### Kotlin
 Kotlin gives us access to coroutines, flow, extension properties on ```Activity```, ```Fragment```,
@@ -65,21 +64,22 @@ I previously used Moshi, following this recommendation of one of the authors of 
 https://www.reddit.com/r/androiddev/comments/684flw/why_use_moshi_over_gson/dgx3gpm/
 But now, I'm using Kotlin native serialization, as it's multiplatform ready.
 
-### Room
-Room is from Android Jetpack, and I wanted to use the officially recommended approach. Unlike Room, SQLDelight is type safe for all kinds of queries, has
-multiplatform support, and supports different databases besides just SQLite. I've never used SQLDelight, so I'll use this repo to try that out as well.
+### SQLDelight
+Unlike Room, SQLDelight is type safe for all kinds of queries, has multiplatform support, and supports different databases besides just SQLite. I don't like that SQLDelight doesn't have an option for a simple suspend function, but this is apparently for a [good reason](https://github.com/cashapp/sqldelight/issues/1420). ```Flow.asSingle()``` works fine.
 
 ### Retrofit2
 Duh.
 
 ### LiveData
-Really crucial for UI updates. I've seen Retrofit adapters for LiveData, but I think that's a mistake. LiveData belongs
-in the ViewModel, not in the Repository.
+Mostly using Flow here. Using LiveData now only for setting the current Employee. This part is a little dirty, but the normal methods didn't work well with NavigationComponent. There is a different nav graph for portrait and landscape, so safe args only work for portrait mode. In landscape mode, you can't even check if args == null; you'll get a crash by just referencing the safe args. 
 
 ### Coil
 The performance of Coil is not as good as Glide, but it's really lightweight, more idiomatic, and reuses many common 
 shared dependencies for Android apps. The first image load is similar to Picasso, and the cached load is similar to 
 Glide. https://proandroiddev.com/coil-vs-picasso-vs-glide-get-ready-go-774add8cfd40
+
+I also implemented a Coil transformation ```CenterOnFaceTransformation```, which uses MLKit Face Detection to find the most prominent face in the image, and zoom the desired amount. It'll be available [here](https://github.com/Commit451/coil-transformations/tree/master/transformations-face-detection) in the future.
+
 
 ### Flow
 Flow lets me emit multiple values for each execution. This is really helpful with MVI, when you want to ```emit``` a
@@ -113,6 +113,8 @@ tricky. Also, handling navigation events as a value that can only be read once, 
 loop of re-navigating to the detail page whenever I pressed back. This is because the navigate-to state was being 
 re-read (observed) every time we navigated back. The ```Event``` class I copied from Mitch Tabian, and allows me to consume a 
 navigation event only once, which handles this issue well.
+
+SharedElementTransitions were also tricky. A lot of the difficulties with SharedElementTransition went away when I converted to DataBinding, and set the transition names in XML.
 
 ## Citations
 Many techniques used here I have learned in Mitch Tabian's Android courses, and GDE Lara Martin's Master-Detail approach
