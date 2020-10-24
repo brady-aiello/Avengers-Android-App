@@ -9,6 +9,7 @@ import coil.transform.RoundedCornersTransformation
 import com.avengers.employeedirectory.R
 import com.avengers.employeedirectory.databinding.EmployeeViewholderBinding
 import com.avengers.employeedirectory.models.Employee
+import com.commit451.coiltransformations.facedetection.CenterOnFaceTransformation
 import kotlinx.coroutines.FlowPreview
 
 class EmployeeRecyclerViewAdapter(

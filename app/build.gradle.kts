@@ -26,15 +26,6 @@ android {
 
         testInstrumentationRunner = "com.avengers.employeedirectory.CustomHiltTestRunner"
         signingConfig = signingConfigs.getByName("debug")
-
-/*        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments(mutableMapOf(
-                        "room.schemaLocation" to "$projectDir/schemas",
-                        "room.incremental" to "true")
-                )
-            }
-        }*/
     }
 
     packagingOptions {
@@ -94,8 +85,8 @@ dependencies {
     implementation(Google.android.material)
 
     // Serialization
-    //implementation(KotlinX.serialization.core)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2")
+    //implementation(KotlinX.serialization.json)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
 
     // Coroutines
     implementation(KotlinX.coroutines.core)
@@ -106,7 +97,7 @@ dependencies {
 
     // Image loading
     implementation(COIL)
-    implementation("com.google.mlkit:face-detection:16.0.2")
+    implementation("com.github.Commit451.coil-transformations:transformations-face-detection:1.0.0")
 
     // Hilt
     implementation(Google.dagger.hilt.android)

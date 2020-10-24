@@ -1,3 +1,5 @@
+import java.net.URI
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     val kotlinVersion: String by rootProject.extra { "1.4.10" }
@@ -8,7 +10,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.0-alpha12")
+        classpath("com.android.tools.build:gradle:4.2.0-alpha14")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath(Square.sqlDelight.gradlePlugin)
         classpath(Google.dagger.hilt.android.gradlePlugin)
@@ -25,6 +27,9 @@ allprojects {
         gradlePluginPortal()
         jcenter()
         mavenCentral()
+        maven {
+            url = URI("https://jitpack.io")
+        }
     }
 }
 

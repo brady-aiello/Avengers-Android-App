@@ -3,6 +3,7 @@ package com.avengers.employeedirectory.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import coil.ImageLoader
+import com.commit451.coiltransformations.facedetection.CenterOnFaceTransformation
 import javax.inject.Inject
 
 class MainFragmentFactory @Inject constructor(

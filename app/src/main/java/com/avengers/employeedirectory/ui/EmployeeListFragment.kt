@@ -22,6 +22,7 @@ import com.avengers.employeedirectory.models.Employee
 import com.avengers.employeedirectory.util.DataState
 import com.avengers.employeedirectory.util.EmployeesStateEvent
 import com.avengers.employeedirectory.util.EmployeesStateEvent.GetEmployeesEvent
+import com.commit451.coiltransformations.facedetection.CenterOnFaceTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

@@ -1,7 +1,8 @@
 package com.avengers.employeedirectory.di
 
 import android.util.LruCache
-import com.avengers.employeedirectory.ui.CenterOnFaceTransformation
+import com.commit451.coiltransformations.facedetection.CenterOnFaceTransformation
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
